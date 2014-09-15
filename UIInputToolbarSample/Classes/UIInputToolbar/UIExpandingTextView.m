@@ -523,22 +523,29 @@
         return NO;
 	}
     
-	//if ([atext isEqualToString:@"\n"])
-    //{
-		if ([self.delegate respondsToSelector:@selector(expandingTextViewShouldReturn:)]) 
+    
+    if ([self.delegate respondsToSelector:@selector(expandingTextView:shouldChangeTextInRange:replacementText::)])
+    {
+        [self.delegate expandingTextView:self shouldChangeTextInRange:range replacementText:atext];
+        
+    } else {
+        if ([atext isEqualToString:@"\n"])
         {
-			if (![self.delegate performSelector:@selector(expandingTextViewShouldReturn:) withObject:self]) 
+            if ([self.delegate respondsToSelector:@selector(expandingTextViewShouldReturn:)])
             {
-				return YES;
-			} 
-            else 
-            {
-				[textView resignFirstResponder];
-				return NO;
-			}
-		}
-	//}
-	return YES;
+                if (![self.delegate performSelector:@selector(expandingTextViewShouldReturn:) withObject:self])
+                {
+                    return YES;
+                }
+                else
+                {
+                    [textView resignFirstResponder];
+                    return NO;
+                }
+            }
+        }
+    }
+    return YES;
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView 
