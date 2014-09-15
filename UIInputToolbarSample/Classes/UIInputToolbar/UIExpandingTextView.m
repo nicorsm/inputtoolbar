@@ -523,8 +523,8 @@
         return NO;
 	}
     
-	if ([atext isEqualToString:@"\n"]) 
-    {
+	//if ([atext isEqualToString:@"\n"])
+    //{
 		if ([self.delegate respondsToSelector:@selector(expandingTextViewShouldReturn:)]) 
         {
 			if (![self.delegate performSelector:@selector(expandingTextViewShouldReturn:) withObject:self]) 
@@ -537,7 +537,7 @@
 				return NO;
 			}
 		}
-	}
+	//}
 	return YES;
 }
 
