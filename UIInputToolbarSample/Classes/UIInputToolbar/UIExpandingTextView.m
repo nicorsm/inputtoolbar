@@ -515,20 +515,17 @@
 		[self.delegate expandingTextViewDidEndEditing:self];
 	}
 }
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)atext 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)atext
 {
-	if(![textView hasText] && [atext isEqualToString:@""]) 
+    if(![textView hasText] && [atext isEqualToString:@""])
     {
         return NO;
-	}
+    }
     
-    
-    if ([self.delegate respondsToSelector:@selector(expandingTextView:shouldChangeTextInRange:replacementText::)])
-    {
-        [self.delegate expandingTextView:self shouldChangeTextInRange:range replacementText:atext];
-        
+    if([self.delegate respondsToSelector:@selector(expandingTextView:shouldChangeTextInRange:replacementText:)]){
+        return [self.delegate expandingTextView:self shouldChangeTextInRange:range replacementText:atext];
     } else {
+        
         if ([atext isEqualToString:@"\n"])
         {
             if ([self.delegate respondsToSelector:@selector(expandingTextViewShouldReturn:)])
@@ -545,8 +542,10 @@
             }
         }
     }
+    
     return YES;
 }
+
 
 - (void)textViewDidChangeSelection:(UITextView *)textView 
 {
