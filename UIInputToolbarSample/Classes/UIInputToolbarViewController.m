@@ -71,6 +71,7 @@
 	/* Listen for keyboard */
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeHeight:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated 
@@ -104,15 +105,11 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height - kKeyboardHeightPortrait;
-    }
-    else {
-        frame.origin.y = self.view.frame.size.width - frame.size.height - kKeyboardHeightLandscape - kStatusBarHeight;
-    }
+    frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardHeight;
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
     keyboardIsVisible = YES;
+    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification 
@@ -130,6 +127,12 @@
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
     keyboardIsVisible = NO;
+}
+
+- (void)keyboardWillChangeHeight:(NSNotification *)notification
+{
+    CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardHeight = keyboardFrame.size.height;
 }
 
 -(void)inputButtonPressed:(UIInputToolbar *) toolbar

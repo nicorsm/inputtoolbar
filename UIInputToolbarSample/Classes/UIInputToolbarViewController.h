@@ -31,6 +31,7 @@
     
     @private
     BOOL keyboardIsVisible;
+    float keyboardHeight;
 }
 
 @property (nonatomic, strong) UIInputToolbar *inputToolbar;
